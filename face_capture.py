@@ -41,6 +41,44 @@ while webcam.isOpened():
 
     """Applying face mesh model using MediaPipe"""
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    # Emotion detection code starts from here
+    labels = []
+    """Changed the color of the image to grey, because we have trained model on grey images"""
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    """
+    detect the faces in the image and returns a list containing the coordinates of the rectangle 
+    around the face. It captures the images of all the people appearing on the camera.
+    """
+    all_human_faces = face_classifier.detectMultiScale(gray, 1.3, 5)
+
+    """Looping over all the detected faces on the camera"""
+    for (x, y, w, h) in all_human_faces:
+
+        """Creates a rectangle on top of the face"""
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+        """Stores values of rectangle on top of the face and resize it to 48 by 48"""
+        roi_gray = gray[y:y + h, x:x + w]
+        roi_gray = cv2.resize(roi_gray, (48, 48), interpolation=cv2.INTER_AREA)
+
+        """If face is detected, convert the values to 0/1 which is easier for model to predict the emotion"""
+        if np.sum([roi_gray]) != 0:
+            roi = roi_gray.astype('float') / 255.0
+            roi = img_to_array(roi)
+            roi = np.expand_dims(roi, axis=0)
+
+            preds = classifier.predict(roi)[0]
+            label = class_labels[preds.argmax()]
+            label_position = (x, y)
+
+            """Display the predicted emotion on the side of the face"""
+            cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+        else:
+            cv2.putText(img, 'No Face Found', (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+        # emotion detection code ends here
+
     results = mp_face_mesh.FaceMesh(refine_landmarks=True).process(img)
 
     # draw annotations on the image
@@ -82,43 +120,6 @@ while webcam.isOpened():
                 f.write(str(face_landmarks))
                 f.write('----------')
             f.close()
-
-        # Emotion detection code starts from here
-        labels = []
-        """Changed the color of the image to grey, because we have trained model on grey images"""
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-        """
-        detect the faces in the image and returns a list containing the coordinates of the rectangle 
-        around the face. It captures the images of all the people appearing on the camera.
-        """
-        all_human_faces = face_classifier.detectMultiScale(gray, 1.3, 5)
-
-        """Looping over all the detected faces on the camera"""
-        for (x, y, w, h) in all_human_faces:
-
-            """Creates a rectangle on top of the face"""
-            cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-
-            """Stores values of rectangle on top of the face and resize it to 48 by 48"""
-            roi_gray = gray[y:y + h, x:x + w]
-            roi_gray = cv2.resize(roi_gray, (48, 48), interpolation=cv2.INTER_AREA)
-
-            """If face is detected, convert the values to 0/1 which is easier for model to predict the emotion"""
-            if np.sum([roi_gray]) != 0:
-                roi = roi_gray.astype('float') / 255.0
-                roi = img_to_array(roi)
-                roi = np.expand_dims(roi, axis=0)
-
-                preds = classifier.predict(roi)[0]
-                label = class_labels[preds.argmax()]
-                label_position = (x, y)
-
-                """Display the predicted emotion on the side of the face"""
-                cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
-            else:
-                cv2.putText(img, 'No Face Found', (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
-            # emotion detection code ends here
 
     ##########################################################################################
     # text: output inage, text, position, font, scale, color, thickness, parameter

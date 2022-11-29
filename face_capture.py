@@ -57,7 +57,7 @@ while webcam.isOpened():
     for (x, y, w, h) in all_human_faces:
 
         """Creates a rectangle on top of the face"""
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
         """Stores values of rectangle on top of the face and resize it to 48 by 48"""
         roi_gray = gray[y:y + h, x:x + w]
@@ -74,7 +74,8 @@ while webcam.isOpened():
             label_position = (x, y)
 
             """Display the predicted emotion on the side of the face"""
-            cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+            # cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+            cv2.putText(img, "Current Expression: " + label, (20, 650), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 225, 0), 2, cv2.LINE_AA)
         else:
             cv2.putText(img, 'No Face Found', (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
         # emotion detection code ends here

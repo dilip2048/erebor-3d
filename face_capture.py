@@ -24,7 +24,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 The "haarcascade_frontalface_default" classifier detects the front face of a person in an image
 """
 face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-classifier = load_model('../erebor/model/EmotionDetectionModel.h5')
+classifier = load_model('EmotionDetectionModel.h5')
 
 """These are the types of emotion that we are going to detect"""
 class_labels = ['Angry', 'Happy', 'Neutral', 'Sad', 'Surprise']

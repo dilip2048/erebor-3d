@@ -71,11 +71,11 @@ while webcam.isOpened():
 
             preds = classifier.predict(roi)[0]
             label = class_labels[preds.argmax()]
-            label_position = (x, y)
+            label_position = (20, 650)
 
             """Display the predicted emotion on the side of the face"""
-            # cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
-            cv2.putText(img, "Current Expression: " + label, (20, 650), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 225, 0), 2, cv2.LINE_AA)
+            cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+            # cv2.putText(img, "Current Expression: " + label, (20, 650), cv2.FONT_HERSHEY_SIMPLEX, 2, (225, 225, 225), 1, cv2.LINE_AA)
         else:
             cv2.putText(img, 'No Face Found', (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
         # emotion detection code ends here

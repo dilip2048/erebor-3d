@@ -24,7 +24,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 The "haarcascade_frontalface_default" classifier detects the front face of a person in an image
 """
 face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-classifier = load_model('../erebor/model/EmotionDetectionModel.h5')
+classifier = load_model('EmotionDetectionModel.h5')
 
 """These are the types of emotion that we are going to detect"""
 class_labels = ['Angry', 'Happy', 'Neutral', 'Sad', 'Surprise']
@@ -57,7 +57,7 @@ while webcam.isOpened():
     for (x, y, w, h) in all_human_faces:
 
         """Creates a rectangle on top of the face"""
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
         """Stores values of rectangle on top of the face and resize it to 48 by 48"""
         roi_gray = gray[y:y + h, x:x + w]
@@ -71,10 +71,16 @@ while webcam.isOpened():
 
             preds = classifier.predict(roi)[0]
             label = class_labels[preds.argmax()]
-            label_position = (x, y)
+            label_position = (20, 440)
+
+            cv2.rectangle(img, (10, 450), (300, 390), (232, 52, 235), 2)
 
             """Display the predicted emotion on the side of the face"""
-            cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+            cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_TRIPLEX, 2, (52, 217, 235), 3)
+
+
+            # cv2.putText(img, "Current Expression: " + label, (20, 650), cv2.FONT_HERSHEY_SIMPLEX, 2, (225, 225,
+            # 225), 1, cv2.LINE_AA)
         else:
             cv2.putText(img, 'No Face Found', (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
         # emotion detection code ends here
@@ -115,11 +121,6 @@ while webcam.isOpened():
                 landmark_drawing_spec=None,
                 connection_drawing_spec=val_c
             )
-
-            with open('framedata.txt', 'w') as f:
-                f.write(str(face_landmarks))
-                f.write('----------')
-            f.close()
 
     ##########################################################################################
     # text: output inage, text, position, font, scale, color, thickness, parameter

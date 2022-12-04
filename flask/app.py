@@ -1,3 +1,10 @@
+'''
+This part of the program is referenced from https://levelup.gitconnected.com/how-to-build-a-real-time-emotion-detection-web-app-ce7e3ed7b7de
+
+I have made changes to the content of the program to display the 3D mesh and emotion detect on the web.
+
+'''
+
 from flask import Flask, render_template, Response
 import cv2
 import numpy as np

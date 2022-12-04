@@ -44,8 +44,6 @@ while webcam.isOpened():
 
     # Emotion detection code starts from here
     labels = []
-
-    label = ""
     """Changed the color of the image to grey, because we have trained model on grey images"""
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -73,9 +71,9 @@ while webcam.isOpened():
 
             preds = classifier.predict(roi)[0]
             label = class_labels[preds.argmax()]
-            label_position = (20, 650)
+            label_position = (20, 440)
 
-            cv2.rectangle(img, (10, 670), (300, 590), (232, 52, 235), 2)
+            cv2.rectangle(img, (10, 450), (300, 390), (232, 52, 235), 2)
 
             """Display the predicted emotion on the side of the face"""
             cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_TRIPLEX, 2, (52, 217, 235), 3)
@@ -124,24 +122,12 @@ while webcam.isOpened():
                 connection_drawing_spec=val_c
             )
 
-            # with open('framedata.txt', 'w') as f:
-            #     f.write(str(face_landmarks))
-            #     f.write('----------')
-            # f.close()
-
     ##########################################################################################
     # text: output inage, text, position, font, scale, color, thickness, parameter
     img = cv2.putText(img, "Press the 'Q' key to exit the program", (20, 20),
                       cv2.FONT_HERSHEY_DUPLEX, 0.5, (225, 225, 225), 1, cv2.LINE_AA)
     img = cv2.putText(img, "(The X window button won't work...)", (20, 40),
                       cv2.FONT_HERSHEY_DUPLEX, 0.5, (225, 225, 225), 1, cv2.LINE_AA)
-
-    cv2.rectangle(img, (10, 670), (300, 590), (232, 52, 235), 2)
-
-    label_position = (20, 650)
-    """Display the predicted emotion on the side of the face"""
-    cv2.putText(img, label, label_position, cv2.FONT_HERSHEY_TRIPLEX, 2, (52, 217, 235), 3)
-
     # img = cv2.putText(img, "Current Expression: ", (20, 440),
     #                   cv2.FONT_HERSHEY_DUPLEX, 0.7, (0, 0, 0), 2, cv2.LINE_AA)
     # img = cv2.putText(img, "Current Expression: ", (20, 440),
